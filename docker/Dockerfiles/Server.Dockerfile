@@ -6,7 +6,7 @@ RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/;
 
 COPY . .
 
-WORKDIR /sln/Essential/Essential.Web/
+WORKDIR /sln/Api/
 
 RUN dotnet restore
 
@@ -19,4 +19,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
 
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "Essential.Web.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]
