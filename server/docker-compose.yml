@@ -1,6 +1,5 @@
-version: "3.8"
+﻿version: "3.8"
 services:
-
   server:
     image: server
     container_name: server
@@ -9,8 +8,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     build:
-      context: ../server
-      dockerfile: ../docker/Dockerfiles/Server.Dockerfile
+      dockerfile: Api/Debug.Dockerfile
     networks:
       - mynetwork
     depends_on:
@@ -20,12 +18,12 @@ services:
       postgres:
         condition: service_healthy
         
+  
   botservice:
     image: botservice
     container_name: botservice
     build:
-      context: ../server
-      dockerfile: ../docker/Dockerfiles/Bot.Dockerfile
+      dockerfile: Bot.AppHost/Debug.Dockerfile
     networks:
       - mynetwork
     depends_on:
@@ -34,6 +32,16 @@ services:
 
       postgres:
         condition: service_healthy
+
+#docker run -p 8080:8080 adminer
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
 
   postgres:
    image: postgres
@@ -69,29 +77,9 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-    
-  client:
-    image: client
-    container_name: client
-    build:
-      context: ../client
-      dockerfile: ../docker/Dockerfiles/Client.Dockerfile
-    hostname: client
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-      
-  adminer:
-    image: adminer
-    container_name: adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - mynetwork
-
+  
 volumes:
-  pgdata:
+ pgdata:
 
 networks:
   mynetwork:
