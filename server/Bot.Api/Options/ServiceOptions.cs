@@ -1,4 +1,4 @@
-﻿namespace Bot.AppHost.Options;
+﻿namespace Bot.Api.Options;
 
 public class ServiceOptions
 {

@@ -1,20 +1,18 @@
-using Bot.AppHost.Options;
-using Bot.AppHost.Services;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using Bot.Api.Options;
+using Bot.Api.Services;
 using Microsoft.Extensions.Options;
 using Shared;
 
-namespace Bot.AppHost;
+namespace Bot.Api;
 
-public class Worker : BackgroundService
+public class BotStarterService : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<BotStarterService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IOptions<ServiceOptions> _options;
 
-    public Worker(
-        ILogger<Worker> logger, 
+    public BotStarterService(
+        ILogger<BotStarterService> logger, 
         IOptions<ServiceOptions> options,
         IServiceScopeFactory serviceScopeFactory)
     {
@@ -28,14 +26,13 @@ public class Worker : BackgroundService
         using var scope = _serviceScopeFactory.CreateScope();
 
         var telegramBotService = scope.ServiceProvider.GetRequiredService<TelegramBotService>();
-        var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var botsData = await telegramBotService.GetBotsAsync();
         
-        var data = appDbContext.TelegramBots.AsNoTracking().ToList();
-        foreach (var botData in data)
+        foreach (var botData in botsData)
         {
             var token = Encryptor.Decrypt(botData.EncryptedToken, _options.Value.Key);
-            await telegramBotService.CreateBot(token);
-            _logger.LogInformation($"{botData.Id} ({botData.BotId} STARTED)");
+            var id = await telegramBotService.CreateBotAsync(token);
+            _logger.LogInformation($"{botData.Id} ({id} STARTED)");
         }
 
         _logger.LogInformation("ALL BOTS STARTED");

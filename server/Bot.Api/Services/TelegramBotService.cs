@@ -1,20 +1,25 @@
-﻿using Bot.AppHost.Factories;
-using Bot.AppHost.Options;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bot.Api.Factories;
+using Bot.Api.Options;
 using Domain.Entities;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Shared;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 
-namespace Bot.AppHost.Services;
+namespace Bot.Api.Services;
 
 public class TelegramBotService(
     TelegramBotFactory telegramBotFactory,
     IOptions<ServiceOptions> _options,
     AppDbContext appDbContext)
 {
-    public async Task<long> CreateBot(string token)
+    public async Task<long> CreateBotAsync(string token)
     {
         try
         {
@@ -41,4 +46,7 @@ public class TelegramBotService(
             return 0;
         }
     }
+
+    public async Task<List<TelegramBot>> GetBotsAsync() => 
+        await appDbContext.TelegramBots.AsNoTracking().ToListAsync();
 }

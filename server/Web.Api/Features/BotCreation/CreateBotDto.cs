@@ -1,4 +1,4 @@
-﻿namespace Api.Controllers;
+﻿namespace Web.Api.Features.BotCreation;
 
 public record CreateBotDto
 {

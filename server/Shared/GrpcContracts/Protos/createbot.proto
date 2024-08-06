@@ -1,0 +1,22 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Shared.GrpcContracts";
+
+package createbot;
+
+// The greeting service definition.
+service BotCreator {
+  // Sends a greeting
+  rpc CreateBot (CreateBotRequest) returns (CreateBotResponse);
+}
+
+// The request message containing the user's name.
+message CreateBotRequest {
+  string Token = 1;
+}
+
+// The response message containing the greetings.
+message CreateBotResponse {
+  int32 Status = 1;
+  string Error = 2;
+}

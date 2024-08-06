@@ -5,15 +5,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <RootNamespace>Web.Api</RootNamespace>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.2.3" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
@@ -21,11 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="RabbitMQ\" />
+    <ProjectReference Include="..\Bot.Api\Bot.Api.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

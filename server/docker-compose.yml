@@ -8,13 +8,10 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     build:
-      dockerfile: Api/Debug.Dockerfile
+      dockerfile: Web.Api/Debug.Dockerfile
     networks:
       - mynetwork
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    
+    depends_on:    
       postgres:
         condition: service_healthy
         
@@ -22,18 +19,16 @@ services:
   botservice:
     image: botservice
     container_name: botservice
+    ports:
+      - "3002:8080"
     build:
-      dockerfile: Bot.AppHost/Debug.Dockerfile
+      dockerfile: Bot.Api/Debug.Dockerfile
     networks:
       - mynetwork
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-
       postgres:
         condition: service_healthy
 
-#docker run -p 8080:8080 adminer
   adminer:
     image: adminer
     container_name: adminer
@@ -41,7 +36,6 @@ services:
       - "8080:8080"
     networks:
       - mynetwork
-
 
   postgres:
    image: postgres
@@ -51,8 +45,6 @@ services:
      POSTGRES_PASSWORD: root
      POSTGRES_USER: postgres
      POSTGRES_DB: telegramappbot
-   ports:
-     - 5432:5432
    volumes:
      - pgdata:/var/lib/postgresql/data
    networks:
@@ -63,21 +55,7 @@ services:
     retries: 5
     start_period: 30s
     timeout: 10s
-  
-  rabbitmq:
-    image: masstransit/rabbitmq
-    container_name: rabbitmq
-    ports:  
-      - "15672:15672"
-      - "5672:5672"
-    networks:
-      - mynetwork
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 10s
-      retries: 5
-  
+
 volumes:
  pgdata:
 
