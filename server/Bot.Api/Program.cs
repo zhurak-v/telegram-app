@@ -1,11 +1,9 @@
-using System.Net;
 using Bot.Api;
 using Bot.Api.Factories;
 using Bot.Api.GrpcServices;
 using Bot.Api.Options;
 using Bot.Api.Services;
 using Infrastructure;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
