@@ -19,8 +19,6 @@ services:
   botservice:
     image: botservice
     container_name: botservice
-    ports:
-      - "3002:8080"
     build:
       dockerfile: Bot.Api/Debug.Dockerfile
     networks:

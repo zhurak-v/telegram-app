@@ -11,7 +11,7 @@ public class CreateBotEndpoint : IModule
     {
         endpoints.MapPost("bot", async ([FromBody] CreateBotDto dto) =>
         {
-            using var channel = GrpcChannel.ForAddress("http://botservice:8080");
+            using var channel = GrpcChannel.ForAddress("http://botservice:8081");
             var client = new BotCreator.BotCreatorClient(channel);
             return await client.CreateBotAsync(new () { Token = dto.Token });
         });
